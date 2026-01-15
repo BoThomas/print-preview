@@ -49,7 +49,7 @@ const disposable: Array<THREE.Texture | THREE.Material | THREE.BufferGeometry> =
 
 const resetCamera = () => {
   if (!camera || !controls) return;
-  camera.position.set(0, 7.5, 9.5);
+  camera.position.set(6, 6.5, 9.5);
   camera.lookAt(0, 0, 0);
   controls.target.set(0, 0, 0);
   controls.update();
@@ -140,8 +140,8 @@ const buildStack = () => {
   const sheets = totalSheets.value;
   const renderCount = Math.min(sheets, maxRenderedSheets);
   const spacingX = planeWidth * 1.25;
-  const spacingZ = planeHeight * 0.75;
-  const columns = Math.ceil(Math.sqrt(renderCount));
+  const spacingZ = planeHeight * 1.5;
+  const columns = Math.min(5, Math.max(1, renderCount));
   const rows = Math.ceil(renderCount / columns);
   const totalWidth = (columns - 1) * spacingX;
   const totalDepth = (rows - 1) * spacingZ;
@@ -181,7 +181,7 @@ const buildStack = () => {
     const col = i % columns;
     const row = Math.floor(i / columns);
     const x = col * spacingX - totalWidth / 2;
-    const z = row * spacingZ - totalDepth / 2;
+    const z = totalDepth / 2 - row * spacingZ;
     sheetGroup.position.set(x, 0, z);
     sheetGroup.rotation.x = THREE.MathUtils.degToRad(-18);
 
@@ -210,16 +210,19 @@ const initScene = () => {
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(45, 1, 0.1, 120);
-  camera.position.set(0, 7.5, 9.5);
+  camera.position.set(6, 6.5, 9.5);
   camera.lookAt(0, 0, 0);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
-  controls.minDistance = 2.8;
+  controls.minDistance = 2.4;
   controls.maxDistance = 24;
   controls.zoomSpeed = 1.1;
   controls.maxPolarAngle = THREE.MathUtils.degToRad(80);
+  controls.enablePan = true;
+  controls.panSpeed = 0.9;
+  controls.screenSpacePanning = true;
   controls.target.set(0, 0, 0);
   controls.update();
 
