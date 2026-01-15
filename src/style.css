@@ -251,6 +251,13 @@ select:focus {
   gap: 1rem;
 }
 
+.preview-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .stack-scene {
   min-height: 280px;
   height: clamp(320px, 45vh, 520px);

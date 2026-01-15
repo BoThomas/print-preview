@@ -34,7 +34,7 @@ const isLandscape = computed(() => orientation.value === "landscape");
 const sheetsPerCopy = computed(() => (isDuplex.value ? Math.ceil(pages.value / 2) : pages.value));
 const totalSheets = computed(() => sheetsPerCopy.value * copies.value);
 const totalSides = computed(() => pages.value * copies.value);
-const maxRenderedSheets = 24;
+const maxRenderedSheets = 100;
 const renderedSheets = computed(() => Math.min(totalSheets.value, maxRenderedSheets));
 const hiddenSheets = computed(() => Math.max(totalSheets.value - renderedSheets.value, 0));
 const hasRenderedPages = computed(() => pageRenders.value.length > 0);
@@ -141,7 +141,7 @@ const buildStack = () => {
   const renderCount = Math.min(sheets, maxRenderedSheets);
   const spacingX = planeWidth * 1.25;
   const spacingZ = planeHeight * 1.5;
-  const columns = Math.min(5, Math.max(1, renderCount));
+  const columns = Math.min(10, Math.max(1, renderCount));
   const rows = Math.ceil(renderCount / columns);
   const totalWidth = (columns - 1) * spacingX;
   const totalDepth = (rows - 1) * spacingZ;
@@ -393,8 +393,7 @@ onBeforeUnmount(() => {
         <p class="eyebrow">Print Preview Studio</p>
         <h1>Visualize printed pages before you hit print.</h1>
         <p class="subhead">
-          Upload a document, choose duplex or simplex settings, and preview a 3D stack of your
-          finished output.
+          Upload a document, choose your settings, and preview a 3D stack of your output.
         </p>
       </div>
     </header>
@@ -489,7 +488,6 @@ onBeforeUnmount(() => {
               <option value="long">Long edge</option>
               <option value="short">Short edge</option>
             </select>
-            <p class="hint" v-if="!isDuplex">Available for duplex only.</p>
           </div>
           <div class="field">
             <label for="orientation">Orientation</label>
@@ -504,7 +502,10 @@ onBeforeUnmount(() => {
       <section class="panel preview" aria-label="3D preview">
         <div class="preview-header">
           <h2>3D preview</h2>
-          <span class="muted">Showing {{ renderedSheets }} of {{ totalSheets }} sheets</span>
+          <div class="preview-actions">
+            <span class="muted">Showing {{ renderedSheets }} of {{ totalSheets }} sheets</span>
+            <button type="button" class="ghost" @click="resetCamera">Reset view</button>
+          </div>
         </div>
         <div class="stack-scene" ref="previewRef">
           <div v-if="!hasRenderedPages && !isLoading" class="empty-state">
