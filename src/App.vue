@@ -400,9 +400,7 @@ onBeforeUnmount(() => {
 
     <main class="layout">
       <div class="top-row">
-        <section class="panel upload compact" aria-label="Upload">
-          <h2>Upload</h2>
-          <p class="muted">PDF or image files work best.</p>
+        <section class="panel upload" aria-label="Upload">
           <label
             class="dropzone"
             :class="{ dragging: isDragging }"
